@@ -82,3 +82,6 @@ IEC60870.Runtime binds configuration from the IEC60870 section. Example ppsetti
 ## License
 
 MIT (to be confirmed with stakeholders).
+
+## Continuous Integration
+An automated GitHub Actions workflow (`.github/workflows/dotnet-ci.yml`) restores, builds, and tests the full solution on every push and pull request targeting `main`.
