@@ -6,3 +6,4 @@
 - IEC 104 APCI state machine with t1/t2/t3 timers and TestFR support.
 - .NET worker runtime with reconnect handling and configurable options.
 - WPF test harness for manual GI and event monitoring.
+ - Added GitHub Actions CI pipeline for build and test automation.
