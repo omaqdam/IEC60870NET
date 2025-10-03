@@ -1,0 +1,8 @@
+# Changelog
+
+## [0.1.0] - 2025-10-03
+- Initial release of IEC60870.NET starter stack.
+- Core ASDU modelling and codecs for M_SP_NA_1, M_ME_NC_1, and C_IC_NA_1.
+- IEC 104 APCI state machine with t1/t2/t3 timers and TestFR support.
+- .NET worker runtime with reconnect handling and configurable options.
+- WPF test harness for manual GI and event monitoring.

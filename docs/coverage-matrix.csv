@@ -1,0 +1,4 @@
+Type,Description,Status
+M_SP_NA_1,Single point information,Supported
+M_ME_NC_1,Measured value short float,Supported
+C_IC_NA_1,General interrogation command,Supported

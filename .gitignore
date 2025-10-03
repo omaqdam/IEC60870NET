@@ -1,0 +1,20 @@
+# Build output
+debug/
+Debug/
+debug-net*/
+Debug-net*/
+release/
+Release/
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+
+# User specific
+*.user
+*.suo
+.vs/
+
+# Packaging / logs
+*.log
+*.zip
