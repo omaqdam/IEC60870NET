@@ -9,10 +9,10 @@
 - [x] CP56Time2a encoder/decoder and span utilities.
 
 ## Application Layer Codecs
-- [x] Codec registry with implementations for M_SP_NA_1, M_ME_NC_1, C_IC_NA_1.
+- [x] Codec registry with implementations for M_SP_NA_1, M_ME_NC_1, M_SP_TB_1, C_IC_NA_1, C_DC_NA_1.
 
 ## Transport 101/104 & Security
-- [ ] IEC 101 FT1.2 framing implementation (skeleton present in IEC60870.Link101).
+- [x] IEC 101 FT1.2 framing implementation with encode/decode helpers in IEC60870.Link101.
 - [x] IEC 104 APCI state machine with timers, k/w enforcement, Start/Stop/Test, TLS-capable connector.
 - [ ] IEC 62351 security enhancements beyond TLS options.
 
@@ -32,7 +32,9 @@
 - [x] CI pipeline (GitHub Actions) for restore/build/test.
 
 ## Next Steps (tracked in docs/project-next-steps.md)
-- Broaden codec coverage (double commands, time-tagged monitors, etc.).
-- Flesh out IEC 101 framing/serial transport beyond skeleton.
+- Broaden codec coverage (double commands, time-tagged monitors, etc.) — initial support delivered; additional profiles pending.
+- Flesh out IEC 101 framing/serial transport beyond skeleton (extend FT1.2 with balanced/unbalanced modes, serial integration).
 - Add automated interop harnesses or golden PCAP replay under 	ests/IEC60870.InteropTests.
 - Implement CLI tooling and security hardening.
+
+

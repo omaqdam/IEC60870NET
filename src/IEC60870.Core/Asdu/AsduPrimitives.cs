@@ -1,12 +1,16 @@
+using System;
+
 namespace IEC60870.Core.Asdu;
 
 public enum AsduTypeId : byte
 {
     // Monitoring
-    M_SP_NA_1  = 1,
-    M_ME_NC_1  = 13,
+    M_SP_NA_1 = 1,
+    M_ME_NC_1 = 13,
+    M_SP_TB_1 = 30,
 
     // Control
+    C_DC_NA_1 = 46,
     C_IC_NA_1 = 100,
 }
 
@@ -64,4 +68,12 @@ public readonly record struct AsduHeader(AsduTypeId TypeId, byte Vsq, CauseOfTra
 {
     public bool IsSequence => (Vsq & 0x80) != 0;
     public byte ObjectCount => (byte)(Vsq & 0x7F);
+}
+
+public enum DoubleCommandState : byte
+{
+    NotPermitted = 0,
+    Off = 1,
+    On = 2,
+    Indeterminate = 3
 }

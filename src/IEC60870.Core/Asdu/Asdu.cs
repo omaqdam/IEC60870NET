@@ -1,5 +1,7 @@
-using System.Linq;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using IEC60870.Core.Time;
 
 namespace IEC60870.Core.Asdu;
 
@@ -49,6 +51,22 @@ public sealed class MeasuredValueShortFloat : InformationObject
     public override AsduTypeId TypeId => AsduTypeId.M_ME_NC_1;
 }
 
+public sealed class TimeTaggedSinglePointInformation : InformationObject
+{
+    public TimeTaggedSinglePointInformation(InformationObjectAddress address, bool value, QualityDescriptor quality, DateTimeOffset timestamp)
+        : base(address, quality)
+    {
+        Value = value;
+        Timestamp = timestamp.ToUniversalTime();
+    }
+
+    public bool Value { get; }
+
+    public DateTimeOffset Timestamp { get; }
+
+    public override AsduTypeId TypeId => AsduTypeId.M_SP_TB_1;
+}
+
 public sealed class InterrogationCommand : InformationObject
 {
     public InterrogationCommand(InformationObjectAddress address, byte qualifier)
@@ -61,6 +79,23 @@ public sealed class InterrogationCommand : InformationObject
 
     public override AsduTypeId TypeId => AsduTypeId.C_IC_NA_1;
 }
+
+public sealed class DoubleCommandInformation : InformationObject
+{
+    public DoubleCommandInformation(InformationObjectAddress address, DoubleCommandState state, bool select, QualityDescriptor quality)
+        : base(address, quality)
+    {
+        State = state;
+        Select = select;
+    }
+
+    public DoubleCommandState State { get; }
+
+    public bool Select { get; }
+
+    public override AsduTypeId TypeId => AsduTypeId.C_DC_NA_1;
+}
+
 public sealed class Asdu
 {
     private readonly ReadOnlyCollection<InformationObject> _objects;
@@ -70,6 +105,11 @@ public sealed class Asdu
         if (objects.Count == 0)
         {
             throw new ArgumentException("An ASDU must contain at least one information object.", nameof(objects));
+        }
+
+        if (objects.Any(obj => obj.TypeId != header.TypeId))
+        {
+            throw new InvalidOperationException("All information objects must match the ASDU type.");
         }
 
         Header = header with

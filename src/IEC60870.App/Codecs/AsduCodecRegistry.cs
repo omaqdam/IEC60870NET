@@ -1,5 +1,5 @@
-using IEC60870.Core.Asdu;
 using IEC60870.Core.Abstractions;
+using IEC60870.Core.Asdu;
 using IEC60870.Core.Util;
 using AsduMessage = IEC60870.Core.Asdu.Asdu;
 
@@ -18,7 +18,9 @@ public sealed class AsduCodecRegistry : IAsduSerializer
     {
         yield return new SinglePointCodec();
         yield return new MeasuredValueShortFloatCodec();
+        yield return new TimeTaggedSinglePointCodec();
         yield return new InterrogationCommandCodec();
+        yield return new DoubleCommandCodec();
     }
 
     public int Write(AsduMessage asdu, Span<byte> destination)

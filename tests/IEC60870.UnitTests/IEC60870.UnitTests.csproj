@@ -16,5 +16,6 @@
     <ProjectReference Include="..\..\src\IEC60870.App\IEC60870.App.csproj" />
     <ProjectReference Include="..\..\src\IEC60870.Core\IEC60870.Core.csproj" />
     <ProjectReference Include="..\\..\\src\\IEC60870.Transport104\\IEC60870.Transport104.csproj" />
+    <ProjectReference Include="..\\..\\src\\IEC60870.Link101\\IEC60870.Link101.csproj" />
   </ItemGroup>
 </Project>
