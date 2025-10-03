@@ -18,10 +18,12 @@ public sealed class AsduCodecRegistry : IAsduSerializer
     {
         yield return new SinglePointCodec();
         yield return new DoublePointCodec();
+        yield return new NormalizedMeasuredValueCodec();
         yield return new MeasuredValueShortFloatCodec();
         yield return new TimeTaggedSinglePointCodec();
         yield return new SingleCommandCodec();
         yield return new DoubleCommandCodec();
+        yield return new SetpointNormalizedCommandCodec();
         yield return new InterrogationCommandCodec();
     }
 

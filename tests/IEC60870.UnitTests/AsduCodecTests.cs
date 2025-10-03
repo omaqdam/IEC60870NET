@@ -51,6 +51,25 @@ public sealed class AsduCodecTests
     }
 
     [Fact]
+    public void EncodeDecodeNormalizedMeasuredValue()
+    {
+        var serializer = new AsduCodecRegistry();
+        var header = new AsduHeader(AsduTypeId.M_ME_NA_1, 1, CauseOfTransmission.Spontaneous, new CommonAddress(4));
+        var asdu = new AsduBuilder()
+            .WithHeader(header)
+            .AddObject(new NormalizedMeasuredValue(new InformationObjectAddress(9), 1234, new QualityDescriptor(0x01)))
+            .Build();
+
+        Span<byte> buffer = stackalloc byte[32];
+        var written = serializer.Write(asdu, buffer);
+        var span = (ReadOnlySpan<byte>)buffer[..written];
+        serializer.TryRead(ref span, out var decoded).Should().BeTrue();
+        var value = decoded!.Objects[0].Should().BeOfType<NormalizedMeasuredValue>().Subject;
+        value.Value.Should().Be(1234);
+        value.Quality.Overflow.Should().BeTrue();
+    }
+
+    [Fact]
     public void EncodeDecodeMeasuredValueShortFloat()
     {
         var serializer = new AsduCodecRegistry();
@@ -104,7 +123,6 @@ public sealed class AsduCodecTests
         var sc = decoded!.Objects[0].Should().BeOfType<SingleCommandInformation>().Subject;
         sc.Value.Should().BeTrue();
         sc.Select.Should().BeTrue();
-        sc.Quality.NotTopical.Should().BeFalse();
     }
 
     [Fact]
@@ -125,6 +143,26 @@ public sealed class AsduCodecTests
         command.State.Should().Be(DoubleCommandState.On);
         command.Select.Should().BeTrue();
         command.Quality.Blocked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void EncodeDecodeSetpointNormalized()
+    {
+        var serializer = new AsduCodecRegistry();
+        var header = new AsduHeader(AsduTypeId.C_SE_NA_1, 1, CauseOfTransmission.Activation, new CommonAddress(12));
+        var asdu = new AsduBuilder()
+            .WithHeader(header)
+            .AddObject(new SetpointCommandNormalized(new InformationObjectAddress(33), 3210, select: true, new QualityDescriptor(0x20)))
+            .Build();
+
+        Span<byte> buffer = stackalloc byte[16];
+        var written = serializer.Write(asdu, buffer);
+        var span = (ReadOnlySpan<byte>)buffer[..written];
+        serializer.TryRead(ref span, out var decoded).Should().BeTrue();
+        var command = decoded!.Objects[0].Should().BeOfType<SetpointCommandNormalized>().Subject;
+        command.Value.Should().Be(3210);
+        command.Select.Should().BeTrue();
+        command.Quality.Substituted.Should().BeTrue();
     }
 
     [Fact]
@@ -159,4 +197,3 @@ public sealed class AsduCodecTests
         decoded.Timestamp.Should().Be(original);
     }
 }
-

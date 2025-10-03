@@ -7,6 +7,7 @@ public sealed class SerialPortOptions
     public int DataBits { get; init; } = 8;
     public Parity Parity { get; init; } = Parity.Even;
     public StopBits StopBits { get; init; } = StopBits.One;
+    public bool Handshake { get; init; } = false;
 }
 
 public enum Parity

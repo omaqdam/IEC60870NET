@@ -9,4 +9,7 @@
     <ProjectReference Include="..\IEC60870.App\IEC60870.App.csproj" />
     <ProjectReference Include="..\IEC60870.Core\IEC60870.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" />
+  </ItemGroup>
 </Project>

@@ -46,6 +46,19 @@ public sealed class DoublePointInformation : InformationObject
     public override AsduTypeId TypeId => AsduTypeId.M_DP_NA_1;
 }
 
+public sealed class NormalizedMeasuredValue : InformationObject
+{
+    public NormalizedMeasuredValue(InformationObjectAddress address, short value, QualityDescriptor quality)
+        : base(address, quality)
+    {
+        Value = value;
+    }
+
+    public short Value { get; }
+
+    public override AsduTypeId TypeId => AsduTypeId.M_ME_NA_1;
+}
+
 public sealed class MeasuredValueShortFloat : InformationObject
 {
     public MeasuredValueShortFloat(InformationObjectAddress address, float value, QualityDescriptor quality)
@@ -123,6 +136,22 @@ public sealed class DoubleCommandInformation : InformationObject
     public bool Select { get; }
 
     public override AsduTypeId TypeId => AsduTypeId.C_DC_NA_1;
+}
+
+public sealed class SetpointCommandNormalized : InformationObject
+{
+    public SetpointCommandNormalized(InformationObjectAddress address, short value, bool select, QualityDescriptor quality)
+        : base(address, quality)
+    {
+        Value = value;
+        Select = select;
+    }
+
+    public short Value { get; }
+
+    public bool Select { get; }
+
+    public override AsduTypeId TypeId => AsduTypeId.C_SE_NA_1;
 }
 
 public sealed class Asdu
