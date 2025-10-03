@@ -34,10 +34,30 @@ public sealed class Ft12FrameTests
         frame.WriteTo(writer);
 
         var bytes = writer.WrittenSpan.ToArray();
-        bytes[5] ^= 0xFF; // break checksum area
+        bytes[7] ^= 0xFF; // corrupt payload -> checksum mismatch
 
         Ft12Frame.TryParse(bytes, out var parsed, out var consumed).Should().BeFalse();
         parsed.Should().BeNull();
         consumed.Should().Be(0);
+    }
+
+    [Fact]
+    public void Ft12FrameParserHandlesFragmentedInput()
+    {
+        var frame = Ft12Frame.Create(0x46, 0x1002, new byte[] { 0xAA, 0xBB });
+        var writer = new ArrayBufferWriter<byte>();
+        frame.WriteTo(writer);
+        var bytes = writer.WrittenSpan.ToArray();
+
+        var parser = new Ft12FrameParser();
+        parser.Append(bytes.AsSpan(0, 3));
+        parser.TryReadFrame(out _).Should().BeFalse();
+
+        parser.Append(bytes.AsSpan(3));
+        parser.TryReadFrame(out var parsed).Should().BeTrue();
+        parsed.Should().NotBeNull();
+        parsed!.Control.Should().Be(0x46);
+        parsed.Address.Should().Be(0x1002);
+        parsed.UserData.ToArray().Should().Equal(new byte[] { 0xAA, 0xBB });
     }
 }

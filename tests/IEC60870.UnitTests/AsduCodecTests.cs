@@ -32,6 +32,25 @@ public sealed class AsduCodecTests
     }
 
     [Fact]
+    public void EncodeDecodeDoublePointInformation()
+    {
+        var serializer = new AsduCodecRegistry();
+        var header = new AsduHeader(AsduTypeId.M_DP_NA_1, 1, CauseOfTransmission.Spontaneous, new CommonAddress(1));
+        var asdu = new AsduBuilder()
+            .WithHeader(header)
+            .AddObject(new DoublePointInformation(new InformationObjectAddress(17), DoublePointState.On, new QualityDescriptor(0x80)))
+            .Build();
+
+        Span<byte> buffer = stackalloc byte[16];
+        var written = serializer.Write(asdu, buffer);
+        var span = (ReadOnlySpan<byte>)buffer[..written];
+        serializer.TryRead(ref span, out var decoded).Should().BeTrue();
+        var dpi = decoded!.Objects[0].Should().BeOfType<DoublePointInformation>().Subject;
+        dpi.State.Should().Be(DoublePointState.On);
+        dpi.Quality.Invalid.Should().BeTrue();
+    }
+
+    [Fact]
     public void EncodeDecodeMeasuredValueShortFloat()
     {
         var serializer = new AsduCodecRegistry();
@@ -66,6 +85,26 @@ public sealed class AsduCodecTests
         serializer.TryRead(ref span, out var decoded).Should().BeTrue();
         var command = decoded!.Objects[0].Should().BeOfType<InterrogationCommand>().Subject;
         command.Qualifier.Should().Be(20);
+    }
+
+    [Fact]
+    public void EncodeDecodeSingleCommand()
+    {
+        var serializer = new AsduCodecRegistry();
+        var header = new AsduHeader(AsduTypeId.C_SC_NA_1, 1, CauseOfTransmission.Activation, new CommonAddress(5));
+        var asdu = new AsduBuilder()
+            .WithHeader(header)
+            .AddObject(new SingleCommandInformation(new InformationObjectAddress(12), value: true, select: true, new QualityDescriptor(0x00)))
+            .Build();
+
+        Span<byte> buffer = stackalloc byte[16];
+        var written = serializer.Write(asdu, buffer);
+        var span = (ReadOnlySpan<byte>)buffer[..written];
+        serializer.TryRead(ref span, out var decoded).Should().BeTrue();
+        var sc = decoded!.Objects[0].Should().BeOfType<SingleCommandInformation>().Subject;
+        sc.Value.Should().BeTrue();
+        sc.Select.Should().BeTrue();
+        sc.Quality.NotTopical.Should().BeFalse();
     }
 
     [Fact]
@@ -120,3 +159,4 @@ public sealed class AsduCodecTests
         decoded.Timestamp.Should().Be(original);
     }
 }
+

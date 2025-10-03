@@ -33,6 +33,19 @@ public sealed class SinglePointInformation : InformationObject
     public override AsduTypeId TypeId => AsduTypeId.M_SP_NA_1;
 }
 
+public sealed class DoublePointInformation : InformationObject
+{
+    public DoublePointInformation(InformationObjectAddress address, DoublePointState state, QualityDescriptor quality)
+        : base(address, quality)
+    {
+        State = state;
+    }
+
+    public DoublePointState State { get; }
+
+    public override AsduTypeId TypeId => AsduTypeId.M_DP_NA_1;
+}
+
 public sealed class MeasuredValueShortFloat : InformationObject
 {
     public MeasuredValueShortFloat(InformationObjectAddress address, float value, QualityDescriptor quality)
@@ -78,6 +91,22 @@ public sealed class InterrogationCommand : InformationObject
     public byte Qualifier { get; }
 
     public override AsduTypeId TypeId => AsduTypeId.C_IC_NA_1;
+}
+
+public sealed class SingleCommandInformation : InformationObject
+{
+    public SingleCommandInformation(InformationObjectAddress address, bool value, bool select, QualityDescriptor quality)
+        : base(address, quality)
+    {
+        Value = value;
+        Select = select;
+    }
+
+    public bool Value { get; }
+
+    public bool Select { get; }
+
+    public override AsduTypeId TypeId => AsduTypeId.C_SC_NA_1;
 }
 
 public sealed class DoubleCommandInformation : InformationObject

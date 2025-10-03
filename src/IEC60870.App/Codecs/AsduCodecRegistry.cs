@@ -17,10 +17,12 @@ public sealed class AsduCodecRegistry : IAsduSerializer
     private static IEnumerable<IInformationObjectCodec> BuildDefaultCodecs()
     {
         yield return new SinglePointCodec();
+        yield return new DoublePointCodec();
         yield return new MeasuredValueShortFloatCodec();
         yield return new TimeTaggedSinglePointCodec();
-        yield return new InterrogationCommandCodec();
+        yield return new SingleCommandCodec();
         yield return new DoubleCommandCodec();
+        yield return new InterrogationCommandCodec();
     }
 
     public int Write(AsduMessage asdu, Span<byte> destination)

@@ -6,10 +6,12 @@ public enum AsduTypeId : byte
 {
     // Monitoring
     M_SP_NA_1 = 1,
+    M_DP_NA_1 = 3,
     M_ME_NC_1 = 13,
     M_SP_TB_1 = 30,
 
     // Control
+    C_SC_NA_1 = 45,
     C_DC_NA_1 = 46,
     C_IC_NA_1 = 100,
 }
@@ -73,6 +75,14 @@ public readonly record struct AsduHeader(AsduTypeId TypeId, byte Vsq, CauseOfTra
 public enum DoubleCommandState : byte
 {
     NotPermitted = 0,
+    Off = 1,
+    On = 2,
+    Indeterminate = 3
+}
+
+public enum DoublePointState : byte
+{
+    Intermediate = 0,
     Off = 1,
     On = 2,
     Indeterminate = 3
